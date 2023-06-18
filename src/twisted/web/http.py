@@ -1000,7 +1000,7 @@ class Request:
                         # surrogateescape -- we want bytes
                         self.args.update(
                             {
-                                x.encode("iso-8859-1"): [
+                                self.encodeKey(x): [
                                     z.encode("utf8", "surrogateescape")
                                     if isinstance(z, str)
                                     else z
@@ -1030,6 +1030,12 @@ class Request:
             self.content.seek(0, 0)
 
         self.process()
+
+    def encodeKey(self, x):
+        utf8Encoded = x.encode("utf-8")
+        isoDecoded = utf8Encoded.decode("iso-8859-1")
+        isoEncoded = isoDecoded.encode("iso-8859-1")
+        return isoEncoded
 
     def __repr__(self) -> str:
         """
